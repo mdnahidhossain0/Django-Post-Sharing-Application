@@ -1,0 +1,58 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sign up</title>
+  <link rel="stylesheet" href="{% static 'css/signup.css' %}">
+</head>
+<body>
+
+  <div class="form-container">
+    <h1 class="title">Create your account</h1>
+
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <form method="post" class="form">
+      {% csrf_token %}
+
+      {% if form %}
+        <div class="errors">{{ form.non_field_errors }}</div>
+
+        {% for field in form.visible_fields %}
+          <label>{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+            <div class="errors">{{ field.errors }}</div>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <input class="input" name="username" type="text" placeholder="Username" required>
+        <input class="input" name="email" type="email" placeholder="Email" required>
+        <input class="input" name="password1" type="password" placeholder="Password" required>
+      {% endif %}
+
+      <button type="submit" class="form-btn">Sign up</button>
+    </form>
+    {% if error %}
+     <p style="color:red">{{ error }}</p>
+    {% endif %}
+    <p class="sign-up-label">
+      Already have an account?
+      <a href="{% url 'login' %}" class="sign-up-link">Log in</a>
+    </p>
+
+    <p class="sign-up-label">
+      <a href="/" class="sign-up-link">Back</a>
+    </p>
+  </div>
+
+</body>
+</html>

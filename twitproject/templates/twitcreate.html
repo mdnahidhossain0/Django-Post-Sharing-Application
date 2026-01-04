@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Tweet</title>
+</head>
+<body>
+
+<h2>Create Tweet</h2>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Post</button>
+</form>
+
+<a href="{% url 'twitlist' %}">Back</a>
+
+</body>
+</html>
