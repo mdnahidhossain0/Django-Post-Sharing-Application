@@ -1,10 +1,11 @@
+from django.http import JsonResponse
 from django.shortcuts import render
 from . models import *
 from . forms import *
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login ,logout
 
 def Login(request):
     if request.method == 'POST':
@@ -89,3 +90,23 @@ def TweetDelete(request, tweet_id):
         tweet.delete()
         return redirect('twitlist')
     return render(request,'twitdelete.html',{'tweet':tweet})
+
+def logout_view(request):
+    logout(request)
+    return redirect('login')
+
+def Search(request):
+    q = request.GET.get('q', '').strip()
+
+    tweets = Tweet.objects.filter(content__icontains=q)
+
+    payload = []
+    for t in tweets:
+        payload.append({
+            'content': t.content,
+            'author': t.author.username
+        })
+
+    return JsonResponse({
+        'payload': payload
+    })
