@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,104 +6,9 @@
     <title>Tweet List</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body{
-            background:#f4f6f8;
-            padding:20px;
-        }
-
-        .container{
-            max-width:900px;
-            margin:auto;
-        }
-
-        .header{
-            display:flex;
-            justify-content:space-between;
-            align-items:center;
-            margin-bottom:20px;
-        }
-
-        .auth-box{
-            display:flex;
-            align-items:center;
-            gap:10px;
-        }
-
-        .auth-box a{
-            text-decoration:none;
-            padding:6px 12px;
-            border-radius:6px;
-            font-size:14px;
-            color:white;
-        }
-
-        .login{ background:#007bff; }
-        .logout{ background:#dc3545; }
-
-        .search-box{
-            margin-bottom:20px;
-        }
-
-        .search-box input{
-            width:100%;
-            padding:10px;
-            border-radius:6px;
-            border:1px solid #ccc;
-            outline:none;
-        }
-
-        .create-btn{
-            display:inline-block;
-            margin-bottom:20px;
-            background:#28a745;
-            color:white;
-            padding:10px 14px;
-            text-decoration:none;
-            border-radius:6px;
-        }
-
-        .tweet-card{
-            background:white;
-            padding:15px;
-            border-radius:10px;
-            margin-bottom:15px;
-            box-shadow:0 4px 10px rgba(0,0,0,0.05);
-        }
-
-        .tweet-card img{
-            width:100%;
-            max-height:300px;
-            object-fit:cover;
-            border-radius:8px;
-            margin-top:10px;
-        }
-
-        .tweet-meta{
-            font-size:14px;
-            color:#555;
-            margin-top:8px;
-        }
-
-        .tweet-actions a{
-            margin-right:10px;
-            text-decoration:none;
-            font-size:14px;
-            color:#007bff;
-        }
-
-        .delete{
-            color:#dc3545;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/twitlist.css' %}">
 </head>
+
 <body>
 
 <div class="container">
@@ -112,12 +18,13 @@
         <h2>All Tweets</h2>
 
         <div class="auth-box">
-            {% if user.is_authenticated %}
-                <span>Hello, <b>{{ user.username }}</b></span>
-                <a href="{% url 'logout' %}" class="logout">Logout</a>
-            {% else %}
-                <a href="{% url 'login' %}" class="login">Login</a>
-            {% endif %}
+        {% if user.is_authenticated %}
+            <span>Hello, <b>{{ user.username }}</b></span>
+            <a href="{% url 'profile' %}" class="login">Profile</a>
+            <a href="{% url 'logout' %}" class="logout">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="login">Login</a>
+        {% endif %}
         </div>
     </div>
 
@@ -131,32 +38,32 @@
         <a href="{% url 'twitcreate' %}" class="create-btn">+ New Tweet</a>
     {% endif %}
 
-    <!-- Auto search results -->
-    <div id="results"></div>
+    <!-- Search Results -->
+    <div id="results" class="tweet-grid"></div>
 
-    <!-- Normal tweets -->
-    <div id="all-tweets">
+    <!-- Tweets -->
+    <div id="all-tweets" class="tweet-grid">
         {% for tweet in tweets %}
-            <div class="tweet-card">
-                <p>{{ tweet.content }}</p>
+        <div class="tweet-card">
+            <p>{{ tweet.content }}</p>
 
-                {% if tweet.photo %}
-                    <img src="{{ tweet.photo.url }}">
-                {% endif %}
+            {% if tweet.photo %}
+                <img src="{{ tweet.photo.url }}">
+            {% endif %}
 
-                <div class="tweet-meta">
-                    By <b>{{ tweet.author.username }}</b> · {{ tweet.created_at }}
-                </div>
-
-                {% if tweet.author == user %}
-                    <div class="tweet-actions">
-                        <a href="{% url 'twitedit' tweet.id %}">Edit</a>
-                        <a href="{% url 'twitdelete' tweet.id %}" class="delete">Delete</a>
-                    </div>
-                {% endif %}
+            <div class="tweet-meta">
+                By <b>{{ tweet.author.username }}</b> · {{ tweet.created_at }}
             </div>
+
+            {% if tweet.author == user %}
+            <div class="tweet-actions">
+                <a href="{% url 'twitedit' tweet.id %}">Edit</a>
+                <a href="{% url 'twitdelete' tweet.id %}" class="delete">Delete</a>
+            </div>
+            {% endif %}
+        </div>
         {% empty %}
-            <p>No tweets found</p>
+            <p class="empty">No tweets found</p>
         {% endfor %}
     </div>
 
@@ -172,7 +79,7 @@ input.addEventListener('keyup', () => {
 
     if(q === ''){
         results.innerHTML = ''
-        allTweets.style.display = 'block'
+        allTweets.style.display = 'grid'
         return
     }
 
@@ -183,7 +90,7 @@ input.addEventListener('keyup', () => {
         allTweets.style.display = 'none'
 
         if(data.payload.length === 0){
-            results.innerHTML = '<p>No tweets found</p>'
+            results.innerHTML = '<p class="empty">No tweets found</p>'
             return
         }
 
@@ -191,7 +98,7 @@ input.addEventListener('keyup', () => {
             results.innerHTML += `
                 <div class="tweet-card">
                     <p>${t.content}</p>
-                    <small>By ${t.author}</small>
+                    <div class="tweet-meta">By <b>${t.author}</b></div>
                 </div>
             `
         })

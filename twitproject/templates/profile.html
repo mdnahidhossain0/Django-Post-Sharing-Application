@@ -1,0 +1,44 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+</head>
+<body>
+
+<div class="profile-container">
+    <div class="profile-card">
+        <div class="profile-image">
+            <img src="{{ user.profile.image.url }}" alt="Profile">
+        </div>
+
+        <div class="profile-info">
+            <h2>{{ user.username }}</h2>
+            <p class="email">{{ user.email }}</p>
+
+            <div class="stats">
+                <div>
+                    <strong>{{ user.tweets.count }}</strong>
+                    <span>Posts</span>
+                </div>
+                <div>
+                    <strong>1.5M</strong>
+                    <span>Followers</span>
+                </div>
+                <div>
+                    <strong>1</strong>
+                    <span>Following</span>
+                </div>
+            </div>
+
+            <a href="{% url 'edit_profile' %}" class="btn">Edit Profile</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

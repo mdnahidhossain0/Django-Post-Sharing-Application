@@ -1,0 +1,50 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: #f4f6f8;
+            font-family: Arial;
+        }
+        .card {
+            max-width: 400px;
+            background: #fff;
+            padding: 25px;
+            margin: 40px auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        button {
+            background: #1da1f2;
+            border: none;
+            color: #fff;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Edit Profile</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ u_form.username }}
+        {{ u_form.email }}
+        {{ p_form.image }}
+
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
+
+</body>
+</html>

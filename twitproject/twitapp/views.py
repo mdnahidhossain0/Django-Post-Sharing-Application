@@ -6,6 +6,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login ,logout
+from .forms import UserUpdateForm, ProfileUpdateForm
 
 def Login(request):
     if request.method == 'POST':
@@ -110,3 +111,45 @@ def Search(request):
     return JsonResponse({
         'payload': payload
     })
+
+
+def Profile(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+
+    if request.method == 'POST':
+        request.user.first_name = request.POST.get('first_name')
+        request.user.last_name = request.POST.get('last_name')
+        request.user.save()
+
+    user_tweets = Tweet.objects.filter(author=request.user).order_by('-created_at')
+    return render(request, 'profile.html', {'tweets': user_tweets})
+
+def edit_profile(request):
+    return render(request, 'edit_profile.html')
+
+
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(
+            request.POST,
+            request.FILES,
+            instance=request.user.profile
+        )
+
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            return redirect('profile')
+
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form
+    }
+    return render(request, 'edit_profile.html', context)
