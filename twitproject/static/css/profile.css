@@ -1,89 +1,165 @@
+/* profile.css */
+
+/* Reset & basic styling */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Poppins', sans-serif;
 }
 
 body {
-    background: #f4f6f8;
+    background: #f3f4f6;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
     padding: 20px;
 }
 
-/* Main container */
+/* Profile Container */
 .profile-container {
+    width: 100%;
+    max-width: 900px;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
 }
 
-/* Profile card */
+/* Profile Card */
 .profile-card {
     background: #fff;
-    max-width: 900px;
-    width: 100%;
-    display: flex;
-    gap: 30px;
-    padding: 30px;
-    border-radius: 12px;
+    border-radius: 15px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Profile image */
+.profile-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+}
+
+/* Profile Image */
 .profile-image img {
-    width: 160px;
-    height: 160px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: cover;
+    border: 4px solid #6b21a8;
+    transition: transform 0.3s ease;
 }
 
-/* Profile info */
+.profile-image img:hover {
+    transform: scale(1.1);
+}
+
+/* Profile Info */
 .profile-info {
+    margin-left: 25px;
     flex: 1;
 }
 
 .profile-info h2 {
-    font-size: 26px;
+    font-size: 28px;
+    color: #111827;
     margin-bottom: 5px;
 }
 
 .profile-info .email {
-    color: #666;
-    margin-bottom: 20px;
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 15px;
 }
 
 /* Stats */
 .stats {
     display: flex;
-    gap: 30px;
-    margin-bottom: 20px;
+    gap: 20px;
+    margin-bottom: 15px;
 }
 
 .stats div {
     text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.stats div:hover {
+    transform: scale(1.1);
 }
 
 .stats strong {
+    display: block;
     font-size: 18px;
+    color: #111827;
 }
 
 .stats span {
-    display: block;
-    font-size: 14px;
-    color: #777;
+    font-size: 12px;
+    color: #6b7280;
 }
 
-/* Button */
+/* Edit Button */
 .btn {
     display: inline-block;
-    padding: 10px 20px;
-    background: #1da1f2;
+    background: #6b21a8;
     color: #fff;
-    border-radius: 6px;
+    padding: 8px 20px;
+    border-radius: 8px;
     text-decoration: none;
-    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.3s ease;
 }
 
-/* 🔹 Mobile Responsive */
+.btn:hover {
+    background: #7c3aed;
+    transform: translateY(-3px);
+}
+
+/* Tweets List */
+.tweets-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+}
+
+.tweet {
+    background: #fff;
+    padding: 15px 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.tweet:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.tweet p {
+    font-size: 16px;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.tweet span {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* Fade-in animation for tweets */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
 @media (max-width: 768px) {
     .profile-card {
         flex-direction: column;
@@ -91,12 +167,12 @@ body {
         text-align: center;
     }
 
-    .stats {
-        justify-content: center;
+    .profile-info {
+        margin-left: 0;
+        margin-top: 15px;
     }
 
-    .profile-image img {
-        width: 120px;
-        height: 120px;
+    .stats {
+        justify-content: center;
     }
 }

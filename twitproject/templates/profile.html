@@ -21,23 +21,25 @@
             <p class="email">{{ user.email }}</p>
 
             <div class="stats">
-                <div>
-                    <strong>{{ user.tweets.count }}</strong>
-                    <span>Posts</span>
-                </div>
-                <div>
-                    <strong>1.5M</strong>
-                    <span>Followers</span>
-                </div>
-                <div>
-                    <strong>1</strong>
-                    <span>Following</span>
-                </div>
-            </div>
-
+    <div>
+        <strong>{{ tweets|length }}</strong>
+        <span>Posts</span>
+    </div>
+</div>
             <a href="{% url 'edit_profile' %}" class="btn">Edit Profile</a>
         </div>
+        
+</div>
     </div>
+    <div class="tweets-list">
+    {% for tweet in tweets %}
+        <div class="tweet">
+            <p>{{ tweet.content }}</p>
+            <span>{{ tweet.created_at|date:"M d, Y H:i" }}</span>
+        </div>
+    {% empty %}
+        <p>No tweets yet.</p>
+    {% endfor %}
 </div>
 
 </body>
