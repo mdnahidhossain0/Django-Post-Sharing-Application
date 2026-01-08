@@ -1,5 +1,4 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +10,8 @@
 <body>
 
 <div class="profile-container">
+
+    <!-- Profile Card -->
     <div class="profile-card">
         <div class="profile-image">
             <img src="{{ user.profile.image.url }}" alt="Profile">
@@ -21,25 +22,33 @@
             <p class="email">{{ user.email }}</p>
 
             <div class="stats">
-    <div>
-        <strong>{{ tweets|length }}</strong>
-        <span>Posts</span>
-    </div>
-</div>
+                <div>
+                    <strong>{{ tweets|length }}</strong>
+                    <span>Posts</span>
+                </div>
+            </div>
+
             <a href="{% url 'edit_profile' %}" class="btn">Edit Profile</a>
         </div>
-        
-</div>
     </div>
+
+    <!-- Tweets -->
     <div class="tweets-list">
-    {% for tweet in tweets %}
-        <div class="tweet">
-            <p>{{ tweet.content }}</p>
-            <span>{{ tweet.created_at|date:"M d, Y H:i" }}</span>
-        </div>
-    {% empty %}
-        <p>No tweets yet.</p>
-    {% endfor %}
+        {% for tweet in tweets %}
+            <div class="tweet">
+                <p>{{ tweet.content }}</p>
+
+                {% if tweet.photo %}
+                    <img src="{{ tweet.photo.url }}" class="tweet-img">
+                {% endif %}
+
+                <span>{{ tweet.created_at|date:"M d, Y H:i" }}</span>
+            </div>
+        {% empty %}
+            <p class="empty">No tweets yet.</p>
+        {% endfor %}
+    </div>
+
 </div>
 
 </body>
